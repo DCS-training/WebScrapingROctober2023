@@ -215,7 +215,7 @@ df <- do.call(rbind, Map(data.frame, Title=ArticlesTest_Title, Text=ArticlesTest
 ##### THE END ################
 
 
-# Day 2: Advanced Rvest Operations (Sessions and forms)
+# Day 2: Advanced Rvest Operations
 library(rvest)
 my_session <- session("https://www.r-bloggers.com/")
 
@@ -275,9 +275,63 @@ SearchResult %>% read_html() %>%
   html_text()
 # So the results are not viewable using our current browser, and we would need another one
 
+# Wait times ===================
+
+# A final trick is wait times to deal with rate limits 
+# First, let's go back to the example from last week
+# This time, we can create URLs for all of the pages
+page1 <- 'https://www.immigrationboards.com/uk-tier-4-student-visas/'
+start_format <- 'https://www.immigrationboards.com/uk-tier-4-student-visas/page'
+# 7125 instead of 500
+n <- c(1:7125)
+n <- which(n%%75==0)
+end_format <- '.html'
+pages <- paste0(start_format, n, end_format)
+pages <- c(page1, pages)
+
+# Print the length
+length(pages)
+# In a case where there's 96 pages, we might want to include wait times
+
+# When we make our function to get article links, let's include a function to tell R to wait a bit each time
+get.article.links <- function(x){
+  links <- read_html(x) %>%
+    html_nodes('.topic_read_locked .topictitle') %>%
+    html_attr('href')
+  #Sys.sleep(time = 5) # At the end of our function, we tell R to wait 5 seconds before doing anything else
+  
+}
+
+# Here, we can use a for loop instead of a map function to include sys.sleep when using the function from yesterday
+# First create a sample
+pages_sample <- head(pages)
+# Now a for loop
+article_links  <- vector("character", length = length(pages_sample))
+for(i in seq_along(pages_sample)){
+  Sys.sleep(5) # Here, we tell R to wait for 5 seconds
+  article_link <- read_html(pages_sample[i])
+  article_links[i] <- article_link %>%
+    html_nodes(".topic_read_locked .topictitle") %>% 
+    html_attr('href')
+}
+
+# Print the beginning of the result
+head(article_links)
+
+# We can also wait for a random amount of time
+article_links  <- vector("character", length = length(pages_sample))
+for(i in seq_along(pages_sample)){
+  Sys.sleep(sample(1:10, 1)) # Here, we tell R to wait for a random time between 1 and 10 seconds
+  article_link <- read_html(pages_sample[i])
+  article_links[i] <- article_link %>%
+    html_nodes(".topic_read_locked .topictitle") %>% 
+    html_attr('href')
+}
+head(article_links)
+
 
 ## Independent projects
-# 1. Continue scraping from the website from last week
+# 1. Continue scraping from the website from last week, expirimenting with some of what we learned today
 # 2. Try to get new data, and present it to the group
 # 3. to find data that you can't seem to scrape, and discuss with the group difficulties you had
 

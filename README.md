@@ -1,7 +1,9 @@
 # Web Scraping with R (October2023)
 A 2-day workshop on how to scrape web forums with R
 
+This intermediate course will teach you how to scrape user-generated content from the internet using R. On the first day, the course will start with a theoretical introduction to web scraping and specific approaches to scraping forums. We will then select two web forums and go through the process of scraping them. On the second day, we will discuss different kinds of websites that present problems for web scraping. One example of these is websites with dynamically generated content. We will select one such website and walk through the process of collecting data from it. 
 
+This is an intermediate-level course. Students must have a basic background in R.
 # Getting Set-up
 
 ## Installing R and R Studio

@@ -53,7 +53,7 @@ Once ready, you are going to find
 
 
 # Author
- Fang Jackson-Yang
+James Besse
 
 # Copyright
 
